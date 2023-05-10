@@ -711,13 +711,13 @@ int playGame(int argc, char* argv[])
 		        {
 		            system("cls");
 		            playerLives--;
-		            if (playerLives < 0)
-		            {
-		            	printf("GAME OVER!\n");
-		                gameOn = false;
-		            }
+		            
 		    	}
-
+				if (playerLives <= 0)
+	            {
+	            	printf("GAME OVER!\n");
+	                gameOn = false;
+	            }
 				    
 				        
 		        
