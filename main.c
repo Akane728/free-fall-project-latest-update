@@ -32,6 +32,7 @@ int main(){
 	system("COLOR F0");
 	showMainMenu();
 }
+
 void showMainMenu(){
 	int b, y=1;
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -207,7 +208,8 @@ int selectOPTION(int x, int y){
 	}
 	return 0;
 }
-
+#define MAX_LINES 100
+#define MAX_LENGTH 100
 typedef struct {
     char* value;
     int xPos;
@@ -221,6 +223,12 @@ typedef struct {
     int yPos;
 } player;
 
+typedef struct {
+	int level;
+	int numberOfQuestions;
+	int obstacleCount;
+} level;
+
 int BOARDHEIGHT = 29;
 int BOARDWIDTH = 50;
 int BOARDXPOS = 30;
@@ -228,13 +236,18 @@ int BOARDYPOS = 0;
 
 int playerScore = 0;
 int playerLives = 3;
-int gameLevel = 1; // initialize the starting level of the game
+// initialize the starting level of the game
 
 int obstaclesPerLevel[3] = { 5, 7, 10 }; // Number of obstacles per level
 
 char* questions[100];
 char* question;
 char* answer;
+
+level levels[3];
+
+
+
 obstacle obstacles[10]; // Increased the size to accommodate maximum obstacles in a level
 player play;
 
@@ -274,10 +287,10 @@ void renderGameQuestion()
     printf("QUESTION: %s", question);
 }
 
-void renderObstacles()
+void renderObstacles(int x)
 {
     int i;
-    for (i = 0; i < obstaclesPerLevel[gameLevel - 1]; i++)
+    for (i = 0; i < x; i++)
     {
         gotoxy(obstacles[i].xPos, obstacles[i].yPos);
         printf("%s", obstacles[i].value);
@@ -295,25 +308,24 @@ void renderPlayerLives()
     printf("Lives: %d", playerLives);
 }
 
-void renderLevel()
+void renderLevel(int level)
 {
     gotoxy(2, 5);
-    printf("Level: %d", gameLevel);
+    printf("Level: %d", level);
 }
 
-void renderScreen()
+void renderScreen(int obstacleCount, int level)
 {
     renderBorders();
     renderPlayer();
-    renderLevel();
+    renderLevel(level);
     renderGameQuestion();
     renderPlayerLives();
     renderGameScore();
-    renderObstacles();
+    renderObstacles(obstacleCount);
 }
 
-#define MAX_LINES 100
-#define MAX_LENGTH 100
+
 char* questions[MAX_LINES];
 int lineCount = 0; // MAX NUMBER OF LINES IN THE TEXT FILE
 
@@ -325,13 +337,11 @@ char* randomNumbers[MAX_LINES];
 
 void fetchGameQuestions(int level)
 {
-    char filenames[3][MAX_LENGTH] = { {"./game_qa/game_questions.csv"},
-                                      {"./game_qa/game_questions2.csv"},
-                                      {"./game_qa/game_questions3.csv"} };
+    char *filenames[3] = {"./game_qa/game_questions.csv",
+                        "./game_qa/game_questions2.csv",
+                        "./game_qa/game_questions3.csv"};
     char buffer[MAX_LENGTH];
     FILE* questionFile;
-
-    level = (level > 3) ? 3 : level;
 
     questionFile = fopen(filenames[level-1], "r");
     if (questionFile == NULL)
@@ -349,7 +359,7 @@ void fetchGameQuestions(int level)
         {
             buffer[len - 1] = '\0'; // remove newline character
         }
-        questions[lineCount] = (char*)malloc(sizeof(char) * (len + 1));
+        questions[lineCount] = malloc(sizeof(char) * (len + 1));
         strcpy(questions[lineCount], buffer);
         lineCount++;
     }
@@ -357,6 +367,15 @@ void fetchGameQuestions(int level)
     fclose(questionFile);
 }
 
+
+void freeGameQuestions()
+{
+	int i;
+	for (i = 0; i < MAX_LINES; i++)
+	{
+		free(questions[i]);
+	}
+}
 /**
  * fetches random numbers from a txt file and stores them in an array
 */
@@ -364,9 +383,9 @@ void fetchGameQuestions(int level)
 void fetchRandomNumbers(int level)
 {
     char filenames[3][MAX_LENGTH] = {
-        {"./game_qa/random_numbers.txt"},
-        {"./game_qa/random_numbers2.txt"},
-        {"./game_qa/random_numbers3.txt"}
+        "./game_qa/random_numbers.txt",
+        "./game_qa/random_numbers2.txt",
+        "./game_qa/random_numbers3.txt"
     };
 
     FILE* file;
@@ -396,7 +415,7 @@ void fetchRandomNumbers(int level)
             {
                 token[len - 1] = '\0'; // remove newline character
             }
-            randomNumbers[randomNumberCount] = (char*)malloc(sizeof(char) * (len + 1));
+            randomNumbers[randomNumberCount] = malloc(sizeof(char) * (len + 1));
             strcpy(randomNumbers[randomNumberCount], token);
             randomNumberCount++;
             token = strtok(NULL, " ");
@@ -404,6 +423,15 @@ void fetchRandomNumbers(int level)
     }
 
     fclose(file);
+}
+
+void freeRandomNumbers()
+{
+	int i;
+	for (i = 0; i < MAX_LINES; i++)
+	{
+		free(randomNumbers[i]);
+	}
 }
 
 void generateRandomQuestion()
@@ -431,6 +459,22 @@ char* generateRandomNumber()
     return randomNumbers[randomIndex];
 }
 
+void createLevels()
+{
+	levels[0].level = 1;
+	levels[0].numberOfQuestions = 5;
+	levels[0].obstacleCount = 5;
+	
+	levels[1].level = 2;
+	levels[1].numberOfQuestions = 7;
+	levels[1].obstacleCount = 7;
+	
+	levels[2].level = 3;
+	levels[2].numberOfQuestions = 10;
+	levels[2].obstacleCount = 10;	
+}
+
+
 void updatePlayerPos()
 {
     while (kbhit())
@@ -448,10 +492,10 @@ void updatePlayerPos()
 }
 
 
-bool checkCollision(int xPos, int yPos)
+bool checkCollision(int xPos, int yPos, int obstacleCount)
 {
     int i;
-    for (i = 0; i < obstaclesPerLevel[gameLevel - 1]; i++)
+    for (i = 0; i < obstacleCount; i++)
     {
         if ((obstacles[i].xPos <= xPos && xPos < (obstacles[i].xPos + strlen(obstacles[i].value))) && (obstacles[i].yPos == yPos))
         {
@@ -461,10 +505,10 @@ bool checkCollision(int xPos, int yPos)
     return false;
 }
 
-void generateObstacles()
+void generateObstacles(int n)
 {
     int i;
-    for (i = 0; i < obstaclesPerLevel[gameLevel - 1] - 1; i++)
+    for (i = 0; i < (n - 1); i++)
     {
         obstacles[i].value = generateRandomNumber();
         obstacles[i].xPos = rand() % (BOARDWIDTH - strlen(obstacles[i].value) - BOARDXPOS) + BOARDXPOS;
@@ -472,16 +516,16 @@ void generateObstacles()
         obstacles[i].isCorrectAnswer = false;
     }
 
-    obstacles[obstaclesPerLevel[gameLevel - 1] - 1].value = answer;
-    obstacles[obstaclesPerLevel[gameLevel - 1] - 1].xPos = rand() % (BOARDWIDTH - strlen(obstacles[obstaclesPerLevel[gameLevel - 1] - 1].value) - BOARDXPOS) + BOARDXPOS;
-    obstacles[obstaclesPerLevel[gameLevel - 1] - 1].yPos = rand() % (BOARDHEIGHT - BOARDYPOS) + BOARDYPOS;
-    obstacles[obstaclesPerLevel[gameLevel - 1] - 1].isCorrectAnswer = true;
+    obstacles[n - 1].value = answer;
+    obstacles[n - 1].xPos = rand() % (BOARDWIDTH - strlen(obstacles[n - 1].value) - BOARDXPOS) + BOARDXPOS;
+    obstacles[n - 1].yPos = rand() % (BOARDHEIGHT - BOARDYPOS) + BOARDYPOS;
+    obstacles[n - 1].isCorrectAnswer = true;
 }
 
-bool checkWin(int xPos, int yPos)
+bool checkWin(int xPos, int yPos, int obstacleCount)
 {
     int i;
-    for (i = 0; i < obstaclesPerLevel[gameLevel - 1]; i++)
+    for (i = 0; i < obstacleCount; i++)
     {
         if ((obstacles[i].xPos <= xPos && xPos < (obstacles[i].xPos + strlen(obstacles[i].value))) && (obstacles[i].yPos == yPos))
         {
@@ -491,14 +535,14 @@ bool checkWin(int xPos, int yPos)
     return false;
 }
 
-void increaseGameSpeed()
+void increaseGameSpeed(int level)
 {
 	
-    if (gameLevel == 2)
+    if (level == 2)
     {
         Sleep(500);
     }
-    else if (gameLevel == 3)
+    else if (level == 3)
     {
         Sleep(300);
     }
@@ -624,190 +668,71 @@ int playGame(int argc, char* argv[])
 
 	int questionCount;
     int obstacleCount;
+    
 	
     
     while (gameOn)
     {
-    
-    
-	play.xPos = 45;
-    play.yPos = 0;
-        	
-	for ( gameLevel = 1; gameLevel < 3; gameLevel++)
-	{
-//		fetchGameQuestions(gameLevel);	
-//		fetchRandomNumbers(gameLevel);
-//		generateRandomQuestion();
-//	    generateObstacles();
+		play.xPos = 45;
+	    play.yPos = 0;
+	    	
+		for ( gameLevel = 0; gameLevel < 3; gameLevel++)
+		{
+			printf("HELLO\n");
+			int j;
+			createLevels();
+			for (j = 0; j < levels[gameLevel].numberOfQuestions; j++)
+			{
+				fetchGameQuestions(levels[gameLevel].level);
+				fetchRandomNumbers(levels[gameLevel].level);
+				generateRandomQuestion();
+				generateObstacles(levels[gameLevel].obstacleCount);
+			    for (i = 0; i < 29; i++)
+			    {
+			        system("cls");
+			        play.yPos = i;
+			        renderScreen(levels[gameLevel].obstacleCount, levels[gameLevel].level);
+			        renderLevel(levels[gameLevel].level);
+			        updatePlayerPos();
+			        if (checkCollision(play.xPos, play.yPos, levels[gameLevel].obstacleCount))
+			        {
+			            break;
+			        }
+			        Sleep(700);
+			        increaseGameSpeed(levels[gameLevel].level);
+			    }
 		
-        if (gameLevel == 1)
-        {
-            questionCount = 5;
-            obstacleCount = 0;
-            for (i = 0; i < questionCount; i++)
-	        {
-	        	//fetchGameQuestions(gameLevel);	
-//	            generateRandomQuestion();
-	            
-	            // Other question processing logic
-	            fetchGameQuestions(gameLevel);	
-				fetchRandomNumbers(gameLevel);
-				generateRandomQuestion();
-			    generateObstacles();
-	        }
-	        for (i = 0; i < obstacleCount; i++)
-	        {
-//				fetchRandomNumbers(gameLevel);
-//	            generateObstacles();
-	            
-	            // Other obstacle processing logic
-//	            fetchGameQuestions(gameLevel);	
-//				fetchRandomNumbers(gameLevel);
-//				generateRandomQuestion();
-//			    generateObstacles();
-	        }
-        }
-        else if (gameLevel == 2)
-        {
-//        	fetchGameQuestions(gameLevel);
-//			fetchRandomNumbers(gameLevel);
-            questionCount = 7;
-//            obstacleCount = obstaclesPerLevel[gameLevel - 1] - 1;
-			obstacleCount = 7;
-            for (i = 0; i < questionCount; i++)
-	        {
-	        	
-//	            generateRandomQuestion();
-	            
-	            fetchGameQuestions(gameLevel);	
-				fetchRandomNumbers(gameLevel);
-				generateRandomQuestion();
-			    generateObstacles();
-	            // Other question processing logic
-	        }
-	        for (i = 0; i < obstacleCount; i++)
-	        {
-	            //generateObstacles();
-	            // Other obstacle processing logic
-	        }
-        }
-        else if (gameLevel == 3)
-        {
-//        	fetchGameQuestions(gameLevel);
-//			fetchRandomNumbers(gameLevel);
-            questionCount = 10;
-            obstacleCount = obstaclesPerLevel[gameLevel - 1] - 1;
-//            for (i = 0; i < questionCount; i++)
-//	        {
-//	        	
-//	            generateRandomQuestion();
-//	            
-//	            // Other question processing logic
-//	        }
-//	        for (i = 0; i < obstacleCount; i++)
-//	        {
-//	            generateObstacles();
-//	            // Other obstacle processing logic
-//	        }
-        }
-        for (i = 0; i < 29; i++)
-	    {
-	        system("cls");
-	        play.yPos = i;
-	        renderScreen();
-	        renderLevel();
-	        updatePlayerPos();
-	        if (checkCollision(play.xPos, play.yPos))
-	        {
-	            break;
-	        }
-	        Sleep(700);
-	        increaseGameSpeed();
-	    }
-        
+		        if (checkWin(play.xPos, play.yPos, levels[gameLevel].obstacleCount))
+		        {
+		            system("cls");
+		            playerScore++;
+		        }
+		        else
+		        {
+		            system("cls");
+		            playerLives--;
+		            if (playerLives < 0)
+		            {
+		            	printf("GAME OVER!\n");
+		                gameOn = false;
+		            }
+		    	}
 
-        if (checkWin(play.xPos, play.yPos))
-        {
-            system("cls");
-            playerScore++;
-            // gameLevel++;
-        }
-        else
-        {
-            system("cls");
-            playerLives--;
-            if (playerLives < 0)
-            {
-            	printf("GAME OVER!\n");
-                gameOn = false;
-            }
-            else
-		    {
-		        printf("Level completed!\n");
-		        printf("Press any key to continue to the next level...");
-		        getch();
-		    }
-    	}
-      
-        
-	    system("cls");
-	    if (playerLives < 0)
-	    {
-	        
+				    
+				        
+		        
+			    system("cls");
+			    // Free dynamically allocated memory
+			    freeGameQuestions();
+			    freeRandomNumbers();
+			
+			    gotoxy(25, 50);	
+			}
+			printf("Level completed!\n");
+	        printf("Press any key to continue to the next level...");
+	        getch();
+		      
 	    }
-	    
-	    
-	      // Check game end conditions
-        if (gameLevel > 3 || playerLives == 0)
-        {
-        	gameOn = false;
-            break;
-        }
-	
-	    // Free dynamically allocated memory
-	    for (i = 0; i < lineCount; i++)
-	    {
-	        free(questions[i]);
-	    }
-	    for (i = 0; i < randomNumberCount; i++)
-	    {
-	        free(randomNumbers[i]);
-	    }
-	
-	    //printf("\e[?25h"); // Makes cursor visible
-	    gotoxy(25, 50);
-        
-        
-    }
-        // Other game logic and loops here
-
-        // Check collision, update player position, etc.
-       
-//
-//        if (checkWin(play.xPos, play.yPos))
-//        {
-//            system("cls");
-//            playerScore++;
-//            // gameLevel++;
-//        }
-//        else
-//        {
-//            system("cls");
-//            playerLives--;
-//            if (playerLives < 0)
-//            {
-//                gameOn = false;
-//            }
-//        }
-//
-//        // Check game end conditions
-//        if (gameLevel > 3 || !gameOn)
-//        {
-//            break;
-//        }
-
-        // Proceed to the next level
-        //gameLevel++;
     }
 
   
