@@ -664,7 +664,8 @@ int playGame(int argc, char* argv[])
     play.profile = '#';
     bool gameOn = true;
     int i;
-    int gameLevel;  // Initialize game level
+    int gameLevel; 
+	playerLives = 3; // Initialize game level
 
 	int questionCount;
     int obstacleCount;
@@ -716,6 +717,7 @@ int playGame(int argc, char* argv[])
 				if (playerLives <= 0)
 	            {
 	            	printf("GAME OVER!\n");
+	            	break;
 	                gameOn = false;
 	            }
 				    
@@ -727,6 +729,10 @@ int playGame(int argc, char* argv[])
 			    freeRandomNumbers();
 			
 			    gotoxy(25, 50);	
+			}
+			if (playerLives <= 0)
+			{
+				break;
 			}
 			printf("Level completed!\n");
 	        printf("Press any key to continue to the next level...");
