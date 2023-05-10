@@ -372,7 +372,7 @@ void fetchRandomNumbers(int level)
     FILE* file;
     char buffer[MAX_LENGTH];
     
-    level = (level > 3) ? 3 : level;
+//    level = (level > 3) ? 3 : level;
 
     file = fopen(filenames[level - 1], "r");
 	
@@ -635,7 +635,10 @@ int playGame(int argc, char* argv[])
         	
 	for ( gameLevel = 1; gameLevel < 3; gameLevel++)
 	{
-		
+//		fetchGameQuestions(gameLevel);	
+//		fetchRandomNumbers(gameLevel);
+//		generateRandomQuestion();
+//	    generateObstacles();
 		
         if (gameLevel == 1)
         {
@@ -643,17 +646,25 @@ int playGame(int argc, char* argv[])
             obstacleCount = 0;
             for (i = 0; i < questionCount; i++)
 	        {
-	        	fetchGameQuestions(gameLevel);	
-	            generateRandomQuestion();
+	        	//fetchGameQuestions(gameLevel);	
+//	            generateRandomQuestion();
 	            
 	            // Other question processing logic
+	            fetchGameQuestions(gameLevel);	
+				fetchRandomNumbers(gameLevel);
+				generateRandomQuestion();
+			    generateObstacles();
 	        }
 	        for (i = 0; i < obstacleCount; i++)
 	        {
-				fetchRandomNumbers(Level);
-	            generateObstacles();
+//				fetchRandomNumbers(gameLevel);
+//	            generateObstacles();
 	            
 	            // Other obstacle processing logic
+//	            fetchGameQuestions(gameLevel);	
+//				fetchRandomNumbers(gameLevel);
+//				generateRandomQuestion();
+//			    generateObstacles();
 	        }
         }
         else if (gameLevel == 2)
@@ -661,17 +672,22 @@ int playGame(int argc, char* argv[])
 //        	fetchGameQuestions(gameLevel);
 //			fetchRandomNumbers(gameLevel);
             questionCount = 7;
-            obstacleCount = obstaclesPerLevel[gameLevel - 1] - 1;
+//            obstacleCount = obstaclesPerLevel[gameLevel - 1] - 1;
+			obstaclCount = 7;
             for (i = 0; i < questionCount; i++)
 	        {
 	        	
-	            generateRandomQuestion();
+//	            generateRandomQuestion();
 	            
+	            fetchGameQuestions(gameLevel);	
+				fetchRandomNumbers(gameLevel);
+				generateRandomQuestion();
+			    generateObstacles();
 	            // Other question processing logic
 	        }
 	        for (i = 0; i < obstacleCount; i++)
 	        {
-	            generateObstacles();
+	            //generateObstacles();
 	            // Other obstacle processing logic
 	        }
         }
@@ -681,18 +697,18 @@ int playGame(int argc, char* argv[])
 //			fetchRandomNumbers(gameLevel);
             questionCount = 10;
             obstacleCount = obstaclesPerLevel[gameLevel - 1] - 1;
-            for (i = 0; i < questionCount; i++)
-	        {
-	        	
-	            generateRandomQuestion();
-	            
-	            // Other question processing logic
-	        }
-	        for (i = 0; i < obstacleCount; i++)
-	        {
-	            generateObstacles();
-	            // Other obstacle processing logic
-	        }
+//            for (i = 0; i < questionCount; i++)
+//	        {
+//	        	
+//	            generateRandomQuestion();
+//	            
+//	            // Other question processing logic
+//	        }
+//	        for (i = 0; i < obstacleCount; i++)
+//	        {
+//	            generateObstacles();
+//	            // Other obstacle processing logic
+//	        }
         }
         for (i = 0; i < 29; i++)
 	    {
