@@ -16,18 +16,12 @@ void adminCustomization();
 void logIn();
 void customize();
 
-void fetchFilePath(char* filePath, int level);
-void fetchGameQuestions(char* filePath);
-void fetchAnswers(char* filePath);
-void fetchRandomNumbers(char* filePath);
-
-
 //Technicals
 int newlineENtab();
 void press();
 void con();
 int selectOPTION();
-
+int playGame(int argc, char* argv[]); 
 
 void gotoxy(int eex, int eey){
 	COORD h;
@@ -87,7 +81,6 @@ int main(){
 	system("COLOR F0");
 	showMainMenu();
 }
-
 void showMainMenu(){
 	int b, y=1;
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -96,26 +89,26 @@ void showMainMenu(){
 		system("COLOR F0");
 		for(b=0;b<30;b++){
 			gotoxy(20,b);
-			SetConsoleTextAttribute(h,240);	printf("Û");
+			SetConsoleTextAttribute(h,240);	printf("ï¿½");
 			gotoxy(100,b);
-			SetConsoleTextAttribute(h,240);	printf("Û");
+			SetConsoleTextAttribute(h,240);	printf("ï¿½");
 		}
 		for(b=0;b<5;b++){
 			gotoxy(58,b);
-			SetConsoleTextAttribute(h,240);	printf("Ü");
+			SetConsoleTextAttribute(h,240);	printf("ï¿½");
 			gotoxy(62,b);
-			SetConsoleTextAttribute(h,240);	printf("Ü");
+			SetConsoleTextAttribute(h,240);	printf("ï¿½");
 		}
 		for(b=3;b<8;b++){
 			gotoxy(55,b);
-			SetConsoleTextAttribute(h,240);	printf("Ü");
+			SetConsoleTextAttribute(h,240);	printf("ï¿½");
 			gotoxy(65,b);
-			SetConsoleTextAttribute(h,240);	printf("Ü");
+			SetConsoleTextAttribute(h,240);	printf("ï¿½");
 		}
-		newlineENtab(3, 3);  SetConsoleTextAttribute(h,240);	printf(" ÜÜÜÜÜÜ  ÜÜÜÜÜÜÜ   ÜÜÜÜÜÜÜ  ÜÜÜÜÜÜÜ      ÜÜÜÜÜÜ  ÜÜÜÜÜÜÜ  ÜÜÜ      ÜÜÜ");
-		newlineENtab(1, 3);	 SetConsoleTextAttribute(h,240);	printf(" ÛÛÛÜÜÜ  ÛÛ   ÛÛ   ÛÛÛÜÜÜÜ  ÛÛÛÜÜÜÜ      ÛÛÛÜÜÜ  ÛÛ   ÛÛ  ÛÛÛ      ÛÛÛ");
-		newlineENtab(1, 3);	 SetConsoleTextAttribute(h,240);	printf(" ÛÛÛ     ÛÛÛÜÛßß   ÛÛÛ      ÛÛÛ          ÛÛÛ     ÛÛÛÛÛÛÛ  ÛÛÛ      ÛÛÛ");
-		newlineENtab(1, 3);	 SetConsoleTextAttribute(h,240);	printf(" ßßß     ßßß  ßß   ßßßßßßß  ßßßßßßß      ßßß     ßßß  ßß  ßßßßßßß  ßßßßßßß");
+		newlineENtab(3, 3);  SetConsoleTextAttribute(h,240);	printf(" ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½   ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½      ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½      ï¿½ï¿½ï¿½");
+		newlineENtab(1, 3);	 SetConsoleTextAttribute(h,240);	printf(" ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½   ï¿½ï¿½   ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½      ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½   ï¿½ï¿½  ï¿½ï¿½ï¿½      ï¿½ï¿½ï¿½");
+		newlineENtab(1, 3);	 SetConsoleTextAttribute(h,240);	printf(" ï¿½ï¿½ï¿½     ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½   ï¿½ï¿½ï¿½      ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½     ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½      ï¿½ï¿½ï¿½");
+		newlineENtab(1, 3);	 SetConsoleTextAttribute(h,240);	printf(" ï¿½ï¿½ï¿½     ï¿½ï¿½ï¿½  ï¿½ï¿½   ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½      ï¿½ï¿½ï¿½     ï¿½ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 		
 		newlineENtab(3, 7);		selectOPTION(1,y); printf("   PLAY"); //system("COLOR F4");
 		newlineENtab(2, 7);		selectOPTION(2,y); printf("HIGH SCORE"); 
@@ -138,7 +131,7 @@ void showMainMenu(){
 		}
 	}
 	if(y==1){
-		//startGame();	
+		startGame();	
 	}else if(y==2){
 		showHighScore();
 	}else if(y==3){
@@ -146,7 +139,7 @@ void showMainMenu(){
 	}else if(y==4){
 		showAuthors();		
 	}else if(y==5){
-		showCustomization();
+		con();
 	}else if(y==6){
 		con();
 	}
@@ -154,7 +147,7 @@ void showMainMenu(){
 void startGame(int argc, char* argv[]){
 	system("cls");
 		
-	//playGame(argc, argv);	
+	playGame(argc, argv);	
 	press();
 	showMainMenu();
 }
@@ -609,11 +602,12 @@ void adminCustomization()
 		showMainMenu();
 		getch();
 	}
+	
+	
 }
 
 #define MAX_LINES 100
 #define MAX_LENGTH 100
-
 typedef struct {
     char* value;
     int xPos;
@@ -628,23 +622,23 @@ typedef struct {
 } player;
 
 typedef struct {
-    int level;
-    int numberOfQuestions;
-    int obstacleCount;
+	int level;
+	int numberOfQuestions;
+	int obstacleCount;
 } level;
 
 int BOARDHEIGHT = 29;
 int BOARDWIDTH = 50;
 int BOARDXPOS = 30;
-int BOARDYPOS = 5;
+int BOARDYPOS = 0;
 
 int playerScore = 0;
 int playerLives = 3;
+// initialize the starting level of the game
 
-int MAX_LINES = 0;
-char* table[100][3];
+int obstaclesPerLevel[3] = { 5, 7, 10 }; // Number of obstacles per level
 
-char* questions[MAX_LINES];
+char* questions[100];
 char* question;
 char* answer;
 
@@ -657,112 +651,40 @@ int totalLines = 0;
 
 level levels[3];
 
-obstacle obstacles[10]; // Increased the size to accommodate maximum obstacles in a level
-player play;
-
-char* questions[MAX_LINES];
-int lineCount = 0; // MAX NUMBER OF LINES IN THE TEXT FILE
-//
-int randomNumberCount = 0;
-char* randomNumbers[MAX_LINES];
-
-void fetchFilePath(char* filePath, int level)
+void fetchFile(char* filepath)
 {
-    char questionPath[MAX_LENGTH];
-    char answerPath[MAX_LENGTH];
-    char randomNumberPath[MAX_LENGTH];
+    FILE *pFile;
+    char buffer[BUFFER_SIZE];
 
-    snprintf(questionPath, sizeof(questionPath), "%s%d%s", filePath, level, "_questions.csv");
-    snprintf(answerPath, sizeof(answerPath), "%s%d%s", filePath, level, "_answers.csv");
-    snprintf(randomNumberPath, sizeof(randomNumberPath), "%s%d%s", filePath, level, "_random_numbers.csv");
+    pFile = fopen(filepath, "r");
 
-    fetchGameQuestions(questionPath);
-    fetchAnswers(answerPath);
-    fetchRandomNumbers(randomNumberPath);
-}
-
-void fetchGameQuestions(char* filePath)
-{
-    FILE* questionFile;
-    char buffer[MAX_LENGTH];
-
-    questionFile = fopen(filePath, "r");
-    if (questionFile == NULL)
+    if (pFile == NULL)
     {
-        printf("Error: could not open file %s\n", filePath);
+        printf("Error: opening file %s\n", filepath);
         exit(1);
     }
 
     totalLines = 0;
-    while (fgets(buffer, MAX_LENGTH, questionFile) != NULL && totalLines < MAX_LINES)
+    while (fgets(buffer, BUFFER_SIZE, pFile))
     {
         int len = strlen(buffer);
-        if (len > 0 && buffer[len - 1] == '\n')
+        if (buffer[len - 1] == '\n')
         {
-            buffer[len - 1] = '\0'; // remove newline character
+            buffer[len - 1] = '\0';
         }
-        questions[totalLines] = malloc(sizeof(char) * (len + 1));
-        strcpy(questions[totalLines], buffer);
+        char *token;
+        token = strtok(buffer, ",");
+        int i = 0;
+        while (token != NULL)
+        {
+            gameQuestionTable[MAX_LINES][i] = malloc((sizeof(char) * strlen(token))); 
+            strcpy(gameQuestionTable[MAX_LINES][i], token);
+            token = strtok(NULL, ",");
+            i++;
+        }
         totalLines++;
     }
-
-    fclose(questionFile);
-}
-
-void fetchAnswers(char* filePath)
-{
-    FILE* answerFile;
-    char buffer[MAX_LENGTH];
-
-    answerFile = fopen(filePath, "r");
-    if (answerFile == NULL)
-    {
-        printf("Error: could not open file %s\n", filePath);
-        exit(1);
-    }
-
-    totalLines = 0;
-    while (fgets(buffer, MAX_LENGTH, answerFile) != NULL && totalLines < MAX_LINES)
-    {
-        int len = strlen(buffer);
-        if (len > 0 && buffer[len - 1] == '\n')
-        {
-            buffer[len - 1] = '\0'; // remove newline character
-        }
-        table[totalLines][0] = malloc(sizeof(char) * (len + 1));
-        strcpy(table[totalLines][0], buffer);
-        totalLines++;
-    }
-
-    fclose(answerFile);
-}
-
-void fetchRandomNumbers(char* filePath)
-{
-    FILE* randomNumberFile;
-    char buffer[MAX_LENGTH];
-
-    randomNumberFile =     fopen(filePath, "r");
-    if (randomNumberFile == NULL)
-    {
-        printf("Error: could not open file %s\n", filePath);
-        exit(1);
-    }
-
-    totalLines = 0;
-    while (fgets(buffer, MAX_LENGTH, randomNumberFile) != NULL && totalLines < MAX_LINES)
-    {
-        int len = strlen(buffer);
-        if (len > 0 && buffer[len - 1] == '\n')
-        {
-            buffer[len - 1] = '\0'; // remove newline character
-        }
-        table[totalLines][1] = malloc(sizeof(char) * (len + 1));
-        strcpy(table[totalLines][1], buffer);
-        totalLines++;
-    }
-
-    fclose(randomNumberFile);
+    fclose(pFile);
 }
 
 void freeTable()
@@ -778,6 +700,9 @@ void freeTable()
 }
 
 
+obstacle obstacles[10]; // Increased the size to accommodate maximum obstacles in a level
+player play;
+
 /**
  * Function for rendering/printing borders of the game
 */
@@ -788,10 +713,10 @@ void renderBorders()
     for (i = 0; i < BOARDHEIGHT; i++)
     {
     	SetConsoleTextAttribute(h,240);
-        printf("Û");
+        printf("ï¿½");
         gotoxy(BOARDXPOS, i);
         SetConsoleTextAttribute(h,240);
-        printf("Û");
+        printf("ï¿½");
         gotoxy((BOARDXPOS + BOARDWIDTH), i);
     }
 }
@@ -852,9 +777,47 @@ void renderScreen(int obstacleCount, int level)
     renderObstacles(obstacleCount);
 }
 
+
+char* questions[MAX_LINES];
+int lineCount = 0; // MAX NUMBER OF LINES IN THE TEXT FILE
+
+int randomNumberCount = 0;
+char* randomNumbers[MAX_LINES];
 /**
  * Grab questions from a csv file or can be a text file
 */
+
+void fetchGameQuestions(int level)
+{
+    char *filenames[3] = {"./game_qa/game_questions.csv",
+                        "./game_qa/game_questions2.csv",
+                        "./game_qa/game_questions3.csv"};
+    char buffer[MAX_LENGTH];
+    FILE* questionFile;
+
+    questionFile = fopen(filenames[level-1], "r");
+    if (questionFile == NULL)
+    {
+        printf("Error: could not open file. \n");
+        return;
+    }
+
+    lineCount = 0; // Update global variable
+
+    while (fgets(buffer, MAX_LENGTH, questionFile) != NULL && lineCount < MAX_LINES)
+    {
+        int len = strlen(buffer);
+        if (len > 0 && buffer[len - 1] == '\n')
+        {
+            buffer[len - 1] = '\0'; // remove newline character
+        }
+        questions[lineCount] = malloc(sizeof(char) * (len + 1));
+        strcpy(questions[lineCount], buffer);
+        lineCount++;
+    }
+
+    fclose(questionFile);
+}
 
 
 void freeGameQuestions()
@@ -865,33 +828,53 @@ void freeGameQuestions()
 		free(questions[i]);
 	}
 }
+/**
+ * fetches random numbers from a txt file and stores them in an array
+*/
 
-void generateRandomQuestion() {
-    int randomIndex = rand() % MAX_LINES;
-    char *questionStr = strtok(questions[randomIndex], ",");
-    char *answerStr = strtok(NULL, ",");
-    if (question != NULL) {
-        free(question);
-        question = NULL;
-    }
-    if (answer != NULL) {
-        free(answer);
-        answer = NULL;
-    }
-    question = malloc(sizeof(char) * (strlen(questionStr) + 1));
-    strcpy(question, questionStr);
-    answer = malloc(sizeof(char) * (strlen(answerStr) + 1));
-    strcpy(answer, answerStr);
-}
+void fetchRandomNumbers(int level)
+{
+    char filenames[3][MAX_LENGTH] = {
+        "./game_qa/random_numbers.txt",
+        "./game_qa/random_numbers2.txt",
+        "./game_qa/random_numbers3.txt"
+    };
 
-void generateObstacles(int n) {
-    int i;
-    for (i = 0; i < n; i++) {
-        obstacles[i].value = fetchRandomNumbers(levels[gameLevel].level); // Assuming this function fetches the random numbers
-        obstacles[i].xPos = rand() % (79 - strlen(obstacles[i].value) - 31) + 31;
-        obstacles[i].yPos = rand() % (BOARDHEIGHT - BOARDYPOS) + BOARDYPOS;
-        obstacles[i].isCorrectAnswer = (i == n - 1); // Set the last obstacle as the correct answer
+    FILE* file;
+    char buffer[MAX_LENGTH];
+    
+//    level = (level > 3) ? 3 : level;
+
+    file = fopen(filenames[level - 1], "r");
+	
+	if (file == NULL)
+    {
+        printf("Error: could not open random numbers file\n");
+        return;
     }
+
+    randomNumberCount = 0; // Update global variable
+
+    // Read the entire line containing the random numbers
+    if (fgets(buffer, MAX_LENGTH, file) != NULL)
+    {
+        // Tokenize the line using space as the delimiter
+        char* token = strtok(buffer, " ");
+        while (token != NULL && randomNumberCount < MAX_LINES)
+        {
+            int len = strlen(token);
+            if (len > 0 && token[len - 1] == '\n')
+            {
+                token[len - 1] = '\0'; // remove newline character
+            }
+            randomNumbers[randomNumberCount] = malloc(sizeof(char) * (len + 1));
+            strcpy(randomNumbers[randomNumberCount], token);
+            randomNumberCount++;
+            token = strtok(NULL, " ");
+        }
+    }
+
+    fclose(file);
 }
 
 void freeRandomNumbers()
@@ -903,19 +886,44 @@ void freeRandomNumbers()
 	}
 }
 
+void generateRandomQuestion()
+{
+    int randomIndex = rand() % lineCount;
+    char *questionStr = strtok(questions[randomIndex], ",");
+    char *answerStr = strtok(NULL, ",");
+    if (question != NULL)
+    {
+        free(question);
+    } 
+    question = malloc(sizeof(char) * (strlen(questionStr) + 1));
+    strcpy(question, questionStr);
+    if (answer != NULL)
+    {
+        free(answer);
+    } 
+    answer = malloc(sizeof(char) * (strlen(answerStr) + 1));
+    strcpy(answer, answerStr);
+}
+
+char* generateRandomNumber()
+{
+    int randomIndex = rand() % randomNumberCount;
+    return randomNumbers[randomIndex];
+}
+
 void createLevels()
 {
 	levels[0].level = 1;
-	levels[0].numberOfQuestions = 7;
-	levels[0].obstacleCount = 7;
+	levels[0].numberOfQuestions = 5;
+	levels[0].obstacleCount = 5;
 	
 	levels[1].level = 2;
-	levels[1].numberOfQuestions = 10;
-	levels[1].obstacleCount = 10;
+	levels[1].numberOfQuestions = 7;
+	levels[1].obstacleCount = 7;
 	
 	levels[2].level = 3;
-	levels[2].numberOfQuestions = 15;
-	levels[2].obstacleCount = 15;	
+	levels[2].numberOfQuestions = 10;
+	levels[2].obstacleCount = 10;	
 }
 
 
@@ -924,24 +932,15 @@ void updatePlayerPos()
     while (kbhit())
     {
         char key = getch();
-        if (key == 'a' || key == 75 )
+        if (key == 'a')
         {
             play.xPos -= 1;
         }
-        if (key == 'd' || key == 77)
+        if (key == 'd')
         {
             play.xPos += 1;
         }
     }
-    
-	if(play.xPos <= 30) 
-	{
-		play.xPos = 31;
-	}
-	if(play.xPos >= 80) 
-	{
-		play.xPos = 79;
-	}
 }
 
 
@@ -958,6 +957,22 @@ bool checkCollision(int xPos, int yPos, int obstacleCount)
     return false;
 }
 
+void generateObstacles(int n)
+{
+    int i;
+    for (i = 0; i < (n - 1); i++)
+    {
+        obstacles[i].value = generateRandomNumber();
+        obstacles[i].xPos = rand() % (BOARDWIDTH - strlen(obstacles[i].value) - BOARDXPOS) + BOARDXPOS;
+        obstacles[i].yPos = rand() % (BOARDHEIGHT - BOARDYPOS) + BOARDYPOS;
+        obstacles[i].isCorrectAnswer = false;
+    }
+
+    obstacles[n - 1].value = answer;
+    obstacles[n - 1].xPos = rand() % (BOARDWIDTH - strlen(obstacles[n - 1].value) - BOARDXPOS) + BOARDXPOS;
+    obstacles[n - 1].yPos = rand() % (BOARDHEIGHT - BOARDYPOS) + BOARDYPOS;
+    obstacles[n - 1].isCorrectAnswer = true;
+}
 
 bool checkWin(int xPos, int yPos, int obstacleCount)
 {
@@ -972,24 +987,127 @@ bool checkWin(int xPos, int yPos, int obstacleCount)
     return false;
 }
 
-int gameSpeed(int level)
+void increaseGameSpeed(int level)
 {
 	
-	if ( level == 1)
-	{
-		return 500;
-	}
-	if ( level == 2)
-	{
-		return 300;
-	}
-	if ( level == 3)
-	{
-		return 100;
-	}
+    if (level == 2)
+    {
+        Sleep(500);
+    }
+    else if (level == 3)
+    {
+        Sleep(300);
+    }
 }
 
 /*
+int playGame(int argc, char* argv[])
+{
+    srand(time(NULL));
+	
+	fetchGameQuestions(1);
+	fetchRandomNumbers(1);
+	fetchGameQuestions(2);
+	fetchRandomNumbers(2);	
+	fetchGameQuestions(3);
+	fetchRandomNumbers(3);
+
+    printf("\e[?25l"); // Makes cursor invisible
+    play.profile = '#';
+    bool gameOn = true;
+    int i;
+    while (gameOn)
+    {
+    
+        play.xPos = 45;
+        play.yPos = 0;
+        int GRA = generateRandomQuestion();
+        int GO = generateObstacles();
+        
+        int countRandomQA = 0;
+        int countObstacles = 0;
+        
+        for ()
+		
+	
+		
+        if (gameLevel == 2) 
+        {
+            for (i = 0; i < obstaclesPerLevel[gameLevel - 1] - 1; i++) 
+            {
+                obstacles[i].value = strdup(generateRandomNumber());
+            }
+        }
+        
+//        if (gameLevel == 3) 
+//        {
+//            for (i = 0; i < obstaclesPerLevel[gameLevel - 1] - 1; i++) 
+//            {
+//                obstacles[i].value = strdup(generateRandomNumber());
+//            }
+//        }
+
+        for (i = 0; i < 29; i++)
+        {
+            system("cls");
+            play.yPos = i;
+            renderScreen();
+            renderLevel();
+            updatePlayerPos();
+            if (checkCollision(play.xPos, play.yPos))
+            {
+                break;
+            }
+            Sleep(700);
+            increaseGameSpeed();
+        }
+
+        if (checkWin(play.xPos, play.yPos))
+        {
+            system("cls");
+            playerScore++;
+//            gameLevel++;
+        }
+        else
+        {
+            system("cls");
+            playerLives--;
+            if (playerLives < 0)
+            {
+                gameOn = false;
+            }
+        }
+    }
+
+    system("cls");
+    if (playerLives < 0)
+    {
+        printf("GAME OVER!\n");
+    }
+    else
+    {
+        printf("Level completed!\n");
+        printf("Press any key to continue to the next level...");
+        getch();
+    }
+
+    // Free dynamically allocated memory
+    for (i = 0; i < lineCount; i++)
+    {
+        free(questions[i]);
+    }
+    for (i = 0; i < randomNumberCount; i++)
+    {
+        free(randomNumbers[i]);
+    }
+
+    printf("\e[?25h"); // Makes cursor visible
+    gotoxy(25, 50);
+    return 0;
+}
+*/
+
+
 int playGame(int argc, char* argv[])
 {
     srand(time(NULL));
@@ -998,7 +1116,7 @@ int playGame(int argc, char* argv[])
     play.profile = '#';
     bool gameOn = true;
     int i;
-   
+    int gameLevel; 
 	playerLives = 3; // Initialize game level
 
 	int questionCount;
@@ -1020,7 +1138,8 @@ int playGame(int argc, char* argv[])
 			{
 				fetchGameQuestions(levels[gameLevel].level);
 				fetchRandomNumbers(levels[gameLevel].level);
-				generateRandomQuestion();
+                question = gameQuestionTable[j][0];
+                answer = gameQuestionTable[j][1];
 				generateObstacles(levels[gameLevel].obstacleCount);
 			    for (i = 0; i < 29; i++)
 			    {
@@ -1033,8 +1152,8 @@ int playGame(int argc, char* argv[])
 			        {
 			            break;
 			        }
-			        Sleep(gameSpeed(levels[gameLevel].level));
-			        
+			        Sleep(700);
+			        increaseGameSpeed(levels[gameLevel].level);
 			    }
 		
 		        if (checkWin(play.xPos, play.yPos, levels[gameLevel].obstacleCount))
@@ -1046,12 +1165,13 @@ int playGame(int argc, char* argv[])
 		        {
 		            system("cls");
 		            playerLives--;
+		            
 		    	}
 				if (playerLives <= 0)
 	            {
 	            	printf("GAME OVER!\n");
+	            	break;
 	                gameOn = false;
-	                break;
 	            }
 				    
 				        
@@ -1069,7 +1189,6 @@ int playGame(int argc, char* argv[])
 			}
 			printf("Level completed!\n");
 	        printf("Press any key to continue to the next level...");
-			playerLives+=3;
 	        getch();
 		      
 	    }
@@ -1081,82 +1200,4 @@ int playGame(int argc, char* argv[])
 
     return 0;
 }
-*/
-
-int playGame(int argc, char* argv[]) {
-    srand(time(NULL));
-
-    play.profile = '#';
-    bool gameOn = true;
-    int i;
-
-    playerLives = 3; // Initialize game level
-
-    while (gameOn) {
-        play.xPos = 45;
-        play.yPos = 0;
-
-        for (int gameLevel = 0; gameLevel < 3; gameLevel++) {
-            createLevels();
-            for (int j = 0; j < levels[gameLevel].numberOfQuestions; j++) {
-                fetchFilePath(argv[1], levels[gameLevel].level); // Assuming the file path is passed as a command line argument
-                fetchGameQuestions(levels[gameLevel].level);
-                fetchRandomNumbers(levels[gameLevel].level);
-
-                generateRandomQuestion();
-                generateObstacles(levels[gameLevel].obstacleCount);
-
-                for (i = 0; i < 29; i++) {
-                    system("cls");
-                    play.yPos = i;
-                    renderScreen(levels[gameLevel].obstacleCount, levels[gameLevel].level);
-                    renderLevel(levels[gameLevel].level);
-                    updatePlayerPos();
-                    if (checkCollision(play.xPos, play.yPos, levels[gameLevel].obstacleCount)) {
-                        break;
-                    }
-                    Sleep(gameSpeed(levels[gameLevel].level));
-                }
-
-                if (checkWin(play.xPos, play.yPos, levels[gameLevel].obstacleCount)) {
-                    system("cls");
-                    playerScore++;
-                } else {
-                    system("cls");
-                    playerLives--;
-                }
-
-                if (playerLives <= 0) {
-                    printf("GAME OVER!\n");
-                    gameOn = false;
-                    break;
-                }
-
-                system("cls");
-                freeGameQuestions();
-                freeRandomNumbers();
-
-                gotoxy(25, 50);
-            }
-
-                        if (playerLives <= 0) {
-                break;
-            }
-
-            printf("Level completed!\n");
-            printf("Press any key to continue to the next level...");
-            getch();
-            playerLives += 3;
-        }
-
-        if (playerLives <= 0) {
-            break;
-        }
-    }
-
-    // Remaining code...
-
-    return 0;
-}
-
 
