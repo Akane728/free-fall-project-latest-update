@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <windows.h>
 #include <stdbool.h>
 #include <string.h>
 #include <time.h>
 #include <conio.h>
+#include <windows.h>
 
 void showMainMenu();
 void startGame();
@@ -14,11 +14,7 @@ void showAuthors();
 void showCustomization();
 void adminCustomization();
 void logIn();
-void playGame();
 void customize();
-void gameSummary();
-void playAgain();
-
 
 int gameSpeed(int level);
 bool checkWin(int xPos, int yPos, int obstacleCount);
@@ -35,7 +31,6 @@ void con();
 int selectOPTION();
 
 #define MAX_LINES 100
-#define MAX_LENGTH 100
 
 typedef struct {
     char* value;
@@ -61,7 +56,6 @@ int BOARDWIDTH = 50;
 int BOARDXPOS = 30;
 int BOARDYPOS = 5;
 
-char playerName[100];
 int playerScore = 0;
 int playerLives = 3;
 int gameLevel;
@@ -81,17 +75,14 @@ int totalLines = 0;
 
 level levels[3];
 
-obstacle obstacles[10]; // Increased the size to accommodate maximum obstacles in a level
+obstacle obstacles[10];
 player play;
-void con();
 
-char* randomNumbers[MAX_LINES];
-
-void gotoxy(int eex, int eey){
-	COORD h;
-	h.X = eex;
-	h.Y = eey;
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), h);
+void gotoxy(int eex, int eey) {
+    COORD h;
+    h.X = eex;
+    h.Y = eey;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), h);
 }
 
 //technicals
@@ -103,7 +94,7 @@ int newlineENtab(int x, int y){
 				printf("\t");
 }
 
-void press() {
+void press(){
 	newlineENtab(4, 6);		printf("Press any key to continue..");
 							getch();
 }
@@ -116,12 +107,6 @@ int selectOPTION(int x, int y){
 		SetConsoleTextAttribute(h,240); 
 	}
 	return 0;
-}
-
-int main(){
-	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-	system("COLOR F0");
-	showMainMenu();
 }
 
 void con()
@@ -147,25 +132,10 @@ void con()
        }
 }
 
-void playAgain()
-{
-    char cont;
-    system("cls");
-    newlineENtab(4, 5);        printf("   Do you want to play again?");
-    newlineENtab(2, 5);        printf("   [Y] Yes");
-    newlineENtab(0, 2);        printf("   [N] No");
-    newlineENtab(1, 7);        cont=getche();
-
-    switch(toupper(cont)){
-          case 'Y':
-          		playGame();
-          case 'N':
-            showMainMenu();
-          default:
-              system("cls");
-              newlineENtab(2, 2);        printf("Wrong key. Try again.");
-                                      con();
-       }
+int main(){
+	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+	system("COLOR F0");
+	showMainMenu();
 }
 
 void showMainMenu(){
@@ -231,41 +201,18 @@ void showMainMenu(){
 		con();
 	}
 }
-void startGame(){
-	system("cls");
-		
-	playGame();
-	press();
-	showMainMenu();
+
+void startGame() {
+	int argc; 
+	char* argv[];
+    system("cls");
+    playGame(argc, argv);
+    press();
+    showMainMenu();
 }
-void showHighScore() {
+
+void showHighScore(){
 	system("cls");
-
-	FILE *playerHighscore;
-
-	playerHighscore = fopen("./csv_files/highscores.csv", "r");
-	if (playerHighscore == NULL) {
-		printf("Error opening file.\n");
-		return;
-	}
-
-	printf("%-20s %-10s %-10s\n", "Player Name", "Score", "Level Finished");
-
-	rewind(playerHighscore);
-
-	// Declare variables
-	char playerName[50];
-	int playerScore;
-	int gameLevel;
-
-	// Print each player's name and score from file
-	while (fscanf(playerHighscore, "%s, %d, %d\n", playerName, &playerScore, &gameLevel) == 3) {
-		printf("%-20s %-10d %-10d\n", playerName, playerScore, gameLevel);
-	}
-
-	fclose(playerHighscore);
-
-	getch();
 	press();
 	showMainMenu();
 }
@@ -479,13 +426,13 @@ void customize()
 			}
 
 			// Get question and answer from user
-			printf("\nEnter a question: ");
+			printf("\nEnter a question (up to 255 characters): ");
 			fgets(question, sizeof(question), stdin);
 			question[strcspn(question, "\n")] = '\0'; // remove the newline character
 			fprintf(levelOne, "%s,", question);
 			printf("\nThe question is added!\n");
 
-			printf("\nEnter the answer: ");
+			printf("\nEnter the answer (up to 255 characters): ");
 			fgets(answer, sizeof(answer), stdin);
 			answer[strcspn(answer, "\n")] = '\0'; // remove the newline character
 			fprintf(levelOne, "%s,", answer);
@@ -504,7 +451,7 @@ void customize()
 		    }
 		    fprintf(levelOne, "\n"); // add a newline character at the end of the line
 		
-		    printf("Random numbers added to the CSV file of Level 0ne.\n");
+		    printf("Random numbers added to the CSV file.\n");
 		    
 			fclose(levelOne);
 
@@ -554,19 +501,19 @@ void customize()
 			}
 
 			// Get question and answer from user
-			printf("\nEnter a question: ");
+			printf("\nEnter a question (up to 255 characters): ");
 			fgets(question, sizeof(question), stdin);
 			question[strcspn(question, "\n")] = '\0'; // remove the newline character
 			fprintf(levelTwo, "%s,", question);
 			printf("\nThe question is added!\n");
 
-			printf("\nEnter the answer: ");
+			printf("\nEnter the answer (up to 255 characters): ");
 			fgets(answer, sizeof(answer), stdin);
 			answer[strcspn(answer, "\n")] = '\0'; // remove the newline character
 			fprintf(levelTwo, "%s,", answer);
 			printf("\nThe answer is added!\n");
 
-			printf("Enter 9 random numbers separated by spaces: ");
+			printf("Enter 6 random numbers separated by spaces: ");
 		    fgets(randomNumber, sizeof(randomNumber), stdin);
 		    randomNumber[strcspn(randomNumber, "\n")] = '\0'; // remove the newline character
 		    
@@ -579,7 +526,7 @@ void customize()
 		    }
 		    fprintf(levelTwo, "\n"); // add a newline character at the end of the line
 		
-		    printf("Random numbers added to the CSV file of Level Two.\n");
+		    printf("Random numbers added to the CSV file.\n");
 		    
 			fclose(levelTwo);
 
@@ -627,19 +574,19 @@ void customize()
 			}
 
 			// Get question and answer from user
-			printf("\nEnter a question: ");
+			printf("\nEnter a question (up to 255 characters): ");
 			fgets(question, sizeof(question), stdin);
 			question[strcspn(question, "\n")] = '\0'; // remove the newline character
 			fprintf(levelThree, "%s,", question);
 			printf("\nThe question is added!\n");
 
-			printf("\nEnter the answer: ");
+			printf("\nEnter the answer (up to 255 characters): ");
 			fgets(answer, sizeof(answer), stdin);
 			answer[strcspn(answer, "\n")] = '\0'; // remove the newline character
 			fprintf(levelThree, "%s,", answer);
 			printf("\nThe answer is added!\n");
 
-			printf("Enter 14 random numbers separated by spaces: ");
+			printf("Enter 6 random numbers separated by spaces: ");
 		    fgets(randomNumber, sizeof(randomNumber), stdin);
 		    randomNumber[strcspn(randomNumber, "\n")] = '\0'; // remove the newline character
 		    
@@ -652,7 +599,7 @@ void customize()
 		    }
 		    fprintf(levelThree, "\n"); // add a newline character at the end of the line
 		
-		    printf("Random numbers added to the CSV file of Level Three.\n");
+		    printf("Random numbers added to the CSV file.\n");
 		    
 			fclose(levelThree);
 
@@ -717,7 +664,6 @@ void adminCustomization()
 	}
 }
 
-
 /**
  * Function for rendering/printing borders of the game
 */
@@ -728,10 +674,10 @@ void renderBorders()
     for (i = 0; i < BOARDHEIGHT; i++)
     {
     	SetConsoleTextAttribute(h,240);
-        printf("Û");
+        printf("ï¿½");
         gotoxy(BOARDXPOS, i);
         SetConsoleTextAttribute(h,240);
-        printf("Û");
+        printf("ï¿½");
         gotoxy((BOARDXPOS + BOARDWIDTH), i);
     }
 }
@@ -739,16 +685,9 @@ void renderBorders()
 /**
  * render player score on the screen
 */
-
-void renderPlayerName()
-{
-    gotoxy(2, 2);
-    printf("Player: %s", playerName);
-}
-
 void renderGameScore()
 {
-    gotoxy(2, 6);
+    gotoxy(2, 2);
     printf("Score: %d", playerScore);
 }
 
@@ -778,13 +717,13 @@ void renderPlayer()
 }
 void renderPlayerLives()
 {
-    gotoxy(2, 5);
+    gotoxy(2, 3);
     printf("Lives: %d", playerLives);
 }
 
 void renderLevel(int level)
 {
-    gotoxy(2, 3);
+    gotoxy(2, 5);
     printf("Level: %d", level);
 }
 
@@ -792,7 +731,6 @@ void renderScreen(int obstacleCount, int level)
 {
     renderBorders();
     renderPlayer();
-    renderPlayerName();
     renderLevel(level);
     renderGameQuestion();
     renderPlayerLives();
@@ -800,86 +738,77 @@ void renderScreen(int obstacleCount, int level)
     renderObstacles(obstacleCount);
 }
 
-int lines = 0;
-char *dataTable[100][3];
+char *filepaths[3] = {
+	"./csv_files/qar_level_one - Sheet1 (2).csv",
+	"./csv_files/qar_level_two - Sheet1.csv",
+	"./csv_files/qar_level_three - Sheet1.csv",
+}; 
 
-void fetchFile(char* filepath)
-{
-    FILE *pFile;
+int gameSpeed(int level) {
+    if (level == 1) {
+        return 500;
+    }
+    else if (level == 2) {
+        return 300;
+    }
+    else if (level == 3) {
+        return 100;
+    }
+    else {
+        return 0;
+    }
+}
+
+void fetchFile(char* filepath) {
+    FILE* pFile;
     char buffer[BUFFER_SIZE];
 
     pFile = fopen(filepath, "r");
 
-    if (pFile == NULL)
-    {
+    if (pFile == NULL) {
         printf("Error: opening file %s\n", filepath);
         exit(1);
     }
-	lines = 0;
-    while (fgets(buffer, BUFFER_SIZE, pFile))
-    {
+
+    int lines = 0;
+    while (fgets(buffer, BUFFER_SIZE, pFile)) {
         int len = strlen(buffer);
-        if (buffer[len - 1] == '\n')
-        {
+        if (buffer[len - 1] == '\n') {
             buffer[len - 1] = '\0';
         }
-        char *token;
+        char* token;
         token = strtok(buffer, ",");
         int i = 0;
-        while (token != NULL)
-        {
-            dataTable[lines][i] = malloc((sizeof(char) * strlen(token))); 
-            strcpy(dataTable[lines][i], token);
+        while (token != NULL) {
+            table[lines][i] = malloc((sizeof(char) * strlen(token)) + 1);
+            strcpy(table[lines][i],  strcpy(table[lines][i], token);
             token = strtok(NULL, ",");
             i++;
         }
         lines++;
     }
+    totalLines = lines;
     fclose(pFile);
 }
 
-int numCount = 0;
-
-void splitRandomNumbers(char *s)
-{
-	char str[100];
-	strcpy(str, s);
-    char *token;
-    token = strtok(str, ";");
-    numCount = 0;
-    while(token != NULL)
-    {
-        randomNumbers[numCount] = malloc(sizeof(char) * strlen(token));
-        strcpy(randomNumbers[numCount], token);
-        numCount++;
-        token = strtok(NULL, ";");
-    }
-}
-
-void freeTable()
-{
+void freeTable() {
     int i, j;
-    for (i = 0; i < 100; i++)
-    {
-        for (j = 0; j < 3; j++)
-        {
-            free(dataTable[i][j]);
+    for (i = 0; i < totalLines; i++) {
+        for (j = 0; j < 3; j++) {
+            free(table[i][j]);
         }
     }
 }
 
-void generateRandomQuestion(int n)
-{
-    int randomIndex = rand() % MAX_LINES;
-    char* questionStr = strtok(questions[randomIndex], ",");
-    char* answerStr = strtok(NULL, ",");
-    if (question != NULL)
-    {
+void generateRandomQuestion(int n) {
+    int randomIndex = rand() % totalLines;
+    char* questionStr = table[randomIndex][0];
+    char* answerStr = table[randomIndex][1];
+    if (question != NULL) {
         free(question);
         question = NULL;
     }
-    if (answer != NULL)
-    {
+    if (answer != NULL) {
         free(answer);
         answer = NULL;
     }
@@ -889,46 +818,22 @@ void generateRandomQuestion(int n)
     strcpy(answer, answerStr);
 }
 
-void generateObstacles(int n, int qn)
-{
-	splitRandomNumbers(dataTable[qn][2]);
+void generateObstacles(int n, int qn) {
     int i;
-    for (i = 0; i < n - 1; i++)
-    {
-        obstacles[i].value = randomNumbers[i]; // Assuming this function fetches the random numbers
-        int len = strlen(obstacles[i].value);
-        obstacles[i].xPos = rand() % (79 - len - 31) + 31;
+    for (i = 0; i < n; i++) {
+        obstacles[i].value = table[qn][i + 2];
+        obstacles[i].xPos = rand() % (79 - strlen(obstacles[i].value) - 31) + 31;
         obstacles[i].yPos = rand() % (BOARDHEIGHT - BOARDYPOS) + BOARDYPOS;
-        obstacles[i].isCorrectAnswer = false; // Set the last obstacle as the correct answer
-    }
-    obstacles[n - 1].value = answer;
-    obstacles[n - 1].xPos = rand() % (79 - 31) + 31;
-    obstacles[n - 1].yPos = rand() % (BOARDHEIGHT - BOARDYPOS) + BOARDYPOS;
-    obstacles[n - 1].isCorrectAnswer = true; // Set the last obstacle as the correct answer
-    
-}
-
-void freeGameQuestions()
-{
-    int i;
-    for (i = 0; i < MAX_LINES; i++)
-    {
-        free(questions[i]);
+        obstacles[i].isCorrectAnswer = (i == n - 1);
     }
 }
 
-
-void freeRandomNumbers()
-{
-    int i;
-    for (i = 0; i < MAX_LINES; i++)
-    {
-        free(randomNumbers[i]);
-    }
+void freeGameQuestions() {
+    free(question);
+    free(answer);
 }
 
-void createLevels()
-{
+void createLevels() {
     levels[0].level = 1;
     levels[0].numberOfQuestions = 7;
     levels[0].obstacleCount = 7;
@@ -942,193 +847,146 @@ void createLevels()
     levels[2].obstacleCount = 15;
 }
 
-void updatePlayerPos()
-{
-    while (kbhit())
-    {
+void updatePlayerPos() {
+    while (kbhit()) {
         char key = getch();
-        if (key == 'a' || key == 75 )
-        {
+        if (key == 'a' || key == 75) {
             play.xPos -= 1;
         }
-        if (key == 'd' || key == 77)
-        {
+        if (key == 'd' || key == 77) {
             play.xPos += 1;
         }
     }
-    
-	if(play.xPos <= 30) 
-	{
-		play.xPos = 31;
-	}
-	if(play.xPos >= 80) 
-	{
-		play.xPos = 79;
-	}
+
+    if (play.xPos <= 30) {
+        play.xPos = 31;
+    }
+    if (play.xPos >= 80) {
+        play.xPos = 79;
+    }
 }
 
-
-bool checkCollision(int xPos, int yPos, int obstacleCount)
-{
+bool checkCollision(int xPos, int yPos, int obstacleCount) {
     int i;
-    for (i = 0; i < obstacleCount; i++)
-    {
-        if ((obstacles[i].xPos <= xPos && xPos < (obstacles[i].xPos + strlen(obstacles[i].value))) && (obstacles[i].yPos == yPos))
-        {
+    for (i = 0; i < obstacleCount; i++) {
+        if ((obstacles[i].xPos <= xPos && xPos < (obstacles[i].xPos + strlen(obstacles[i].value))) && (obstacles[i].yPos == yPos)) {
             return true;
         }
     }
     return false;
 }
 
-
-bool checkWin(int xPos, int yPos, int obstacleCount)
-{
+bool checkWin(int xPos, int yPos, int obstacleCount) {
     int i;
-    for (i = 0; i < obstacleCount; i++)
-    {
-        if ((obstacles[i].xPos <= xPos && xPos < (obstacles[i].xPos + strlen(obstacles[i].value))) && (obstacles[i].yPos == yPos))
-        {
+    for (i = 0; i < obstacleCount; i++) {
+        if ((obstacles[i].xPos <= xPos && xPos < (obstacles[i].xPos + strlen(obstacles[i].value))) && (obstacles[i].yPos == yPos)) {
             return obstacles[i].isCorrectAnswer;
         }
     }
     return false;
 }
 
-int gameSpeed(int level)
-{
-	
-	if ( level == 1)
-	{
-		return 500;
-	}
-	if ( level == 2)
-	{
-		return 300;
-	}
-	if ( level == 3)
-	{
-		return 100;
-	}
-}
+void playGame(int argc, char* argv[]) {
+    int level = 1;
+    if (argc == 2) {
+        level = atoi(argv[1]);
+    }
 
-char *filepaths[3] = {
-	"./csv_files/qar_level_one - Sheet1 (2).csv",
-	"./csv_files/qar_level_two - Sheet1.csv",
-	"./csv_files/qar_level_three - Sheet1.csv",
-};
+    gameLevel = level;
 
-
-void playGame()
-{
-	
-	printf("Enter your player name: ");
-    scanf("%s", playerName);
-	
     srand(time(NULL));
+    createLevels();
+    fetchFile("questions.csv");
 
-    play.profile = '#';
-    bool gameOn = true;
-    int i,j;
+    int currentLevel = 0;
+    int currentQuestion = 0;
 
-    playerLives = 3; // Initialize game level
+    while (currentLevel < level) {
+        currentQuestion = 0;
+        int questionsRemaining = levels[currentLevel].numberOfQuestions;
 
-    while (gameOn)
-    {
-    	play.xPos = 45;
-        play.yPos = 0;
+        while (currentQuestion < levels[currentLevel].numberOfQuestions) {
+            system("cls");
+            printf("Level: %d\n", currentLevel + 1);
+            printf("Question: %d\n\n", currentQuestion + 1);
 
-        for ( gameLevel = 0; gameLevel < 3; gameLevel++)
-        {
-            createLevels();
-            for ( j = 0; j < levels[gameLevel].numberOfQuestions; j++)
-            {
-                fetchFile(filepaths[gameLevel]);
-				question = dataTable[j][0];
-				answer = dataTable[j][1];
-				generateObstacles(levels[gameLevel].obstacleCount, j);
+            generateRandomQuestion(levels[currentLevel].numberOfQuestions);
+            generateObstacles(levels[currentLevel].obstacleCount, currentQuestion);
 
-                for (i = 0; i < 29; i++)
-                {
-                    system("cls");
-                    play.yPos = i;
-                    renderScreen(levels[gameLevel].obstacleCount, levels[gameLevel].level);
-                    renderLevel(levels[gameLevel].level);
-                    updatePlayerPos();
-                    if (checkCollision(play.xPos, play.yPos, levels[gameLevel].obstacleCount))
-                    {
-                        break;
-                    }
-                    Sleep(gameSpeed(levels[gameLevel].level));
+            int yPos = BOARDHEIGHT;
+            int gameSpeedMs = gameSpeed(currentLevel + 1);
+            bool hasWon = false;
+
+            while (yPos > BOARDYPOS - 1) {
+                system("cls");
+                gotoxy(BOARDXPOS, BOARDYPOS - 2);
+                printf("Lives: %d   Score: %d", playerLives, playerScore);
+                gotoxy(BOARDXPOS, BOARDYPOS);
+
+                int i;
+                for (i = 0; i < levels[currentLevel].obstacleCount; i++) {
+                    gotoxy(obstacles[i].xPos, obstacles[i].yPos);
+                    printf("%s", obstacles[i].value);
                 }
 
-                if (checkWin(play.xPos, play.yPos, levels[gameLevel].obstacleCount))
-                {
-                    system("cls");
-                    playerScore++;
-                }
-                else
-                {
-                    system("cls");
+                gotoxy(play.xPos, yPos);
+                printf("%c", play.profile);
+                updatePlayerPos();
+
+                if (checkCollision(play.xPos, yPos, levels[currentLevel].obstacleCount)) {
                     playerLives--;
-                }
-
-                if (playerLives <= 0)
-                {
-                    printf("GAME OVER!\n");
-                    system("cls");
-                    gameSummary();
-                    playAgain();
-                    gameOn = false;
                     break;
                 }
 
-                system("cls");
+                if (checkWin(play.xPos, yPos, levels[currentLevel].obstacleCount)) {
+                    playerScore++;
+                    questionsRemaining--;
+                    currentQuestion++;
+                    hasWon = true;
+                    break;
+                }
 
-                gotoxy(25, 50);
+                yPos--;
+                Sleep(gameSpeedMs);
             }
-			freeTable();
 
-            if (playerLives <= 0)
-            {
+            if (yPos <= BOARDYPOS - 1) {
+                playerLives--;
+            }
+
+            if (playerLives <= 0) {
                 break;
             }
 
-            printf("Level completed!\n");
-            printf("Press any key to continue to the next level...");
-            getch();
-            playerLives += 3;
+            if (questionsRemaining <= 0) {
+                currentLevel++;
+            }
+
+            if (!hasWon) {
+                currentQuestion++;
+            }
         }
 
-        if (playerLives <= 0)
-        {
+        if (playerLives <= 0) {
             break;
         }
     }
 
+    freeGameQuestions();
+    freeTable();
+
+    system("cls");
+
+    if (playerLives > 0) {
+        printf("Congratulations! You have completed all levels!\n");
+        printf("Final Score: %d\n", playerScore);
+        printf("Well done!\n");
+    }
+    else {
+        printf("Game Over! You ran out of lives.\n");
+        printf("Final Score: %d\n", playerScore);
+        printf("Better luck next time!\n");
+    }
 }
 
-void gameSummary()
-{
-	
-	newlineENtab(3, 6); printf("GAME SUMMARY!");
-	newlineENtab(4, 3); printf("PLAYER NAME: %s", playerName); 
-	newlineENtab(2, 3); printf("SCORE: %d", playerScore);
-	newlineENtab(2, 3); printf("LEVEL FINISHED: %d", levels[gameLevel].level);
-	
-	FILE *playerHighscore;
-	
-	playerHighscore = fopen("./csv_files/highscores.csv", "a");
-			if (playerHighscore == NULL) {
-				printf("Error opening file.\n");
-				return;
-			}
-	
-	fprintf(playerHighscore, "%s, %d, %d\n", playerName, playerScore, levels[gameLevel].level);
-	
-	fclose(playerHighscore);
-}
-
-
-
-
+    
